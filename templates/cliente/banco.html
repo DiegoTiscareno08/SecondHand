@@ -1,0 +1,29 @@
+{% extends "layoutCliente.html" %}
+{% block content %}
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>{{message}}</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+<div class="card text-center">
+    <div class="card-header">
+      <img src="https://firebasestorage.googleapis.com/v0/b/appi-ecf0e.appspot.com/o/bank.JPG?alt=media&token=0ea50bdc-5b8b-4c38-a91c-f054e886352f">
+    </div>
+    <div class="card-body">
+            <h5 class="card-title">Producto</h5>
+            <h4 class="card-text">{{producto}}</h4>
+            <h5 class="card-title">Precio</h5>
+            <p class="card-text"><h1 style="color: limegreen;">{{"${:,.2f}".format(precio)}}</h1></p>
+            <p class="card-text"><img src="https://firebasestorage.googleapis.com/v0/b/appi-ecf0e.appspot.com/o/codabar.jpg?alt=media&token=bda1bea0-4f85-4ed1-9716-284fc5ee5f3c"></p>
+            <a href="/pagar/{{compra}}" class="btn btn-success btn-lg btn-block">Pagar</a>
+            <a href="{{ url_for('compras')}}" class="btn btn-danger btn-lg btn-block">Cancelar</a>
+    </div>
+    <div class="card-footer text-muted">
+
+    </div>
+  </div>
+
+{% endblock %}

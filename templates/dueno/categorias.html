@@ -1,0 +1,58 @@
+{% extends "layoutDueno.html" %}
+{% block content %}
+<h6>Agrega una nueva Categoría</h6>
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>{{message}}</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+<form class="form-inline" action="/newCategory" method="POST" onsubmit="return confirmation()">
+    <div class="form-group mb-2">
+      <label for="staticEmail2" class="sr-only">Email</label>
+      <input type="text"  id ="categoria" name="txtCategoria" placeholder="Escribe la nueva categoría">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Agregar</button>
+  </form>
+{% if cates%}
+<table class="table" id="mytable">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Categoira</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+{%for c in cates%}
+<tr>
+  <th scope="row">{{c.key()}}</th>
+  <td>{{c.val().nombreCategoria}}</td>
+  <td><a class="btn btn-danger"href="/deleteCategoria/{{c.key()}}">Eliminar</a></td>
+</tr>
+{%endfor%}
+</tbody>
+</table>
+
+{%else%}
+<h5>No hay productos por mostrar</h5>
+{%endif%}
+<script type="text/javascript">
+    
+    function confirmation() 
+    {
+       var elem = document.getElementById("categoria").value;
+       if(confirm("Esta seguro de agregar esta categoria "+elem))
+   {
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+    }
+   </script>
+
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends "layoutCliente.html"%}
+{% block content%}
+<div class="row">
+    <div class="col-3">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <br>
+        <div class="mx-auto"style="width:200px;">
+        <h>Agregar Producto</h>
+        <form method="POST" action="/addProducto" enctype="multipart/form-data">
+            <div class="form-group">
+              <input type="text" class="form-control"value="{{session['usuario']}}" style="background-color: tomato;color: whitesmoke;"disabled>
+              <input type="hidden" class="form-control"value="{{session['usuario']}}" style="background-color: tomato;color: whitesmoke;"name="txtVende">
+              <input type="text" class="form-control" name="txtProducto" placeholder="Nombre del producto" required>
+              <input type="number" class="form-control" name="txtPrecio" placeholder="Precio del producto" required>
+              <input type="hidden" class="form-control" name="txtPieza" value="1">
+              <select class="custom-select" name="txtCategoria"required>
+                <option selected value="">Selecciona una categoria</option>
+              {% for c in cate %}
+                <option value="{{c.key()}}">{{c.val().nombreCategoria}}</option>
+              {% endfor %}
+              </select>
+              <label for="exampleInputEmail1">Descripción</label>
+              <textarea required name="txtDescripcion"class="form-control" aria-label="With textarea"></textarea>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                </div>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" name="upload"id="upload" aria-describedby="inputGroupFileAddon01">
+                  <label class="custom-file-label" for="upload">Choose file</label>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Solicitar Vender</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="addCategoria" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+            <table class="table" id="mytable">
+                {%if vendidos%}
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                    {%for v in vendidos%}
+                    {%for p in productos%}
+                    {%if v.val().producto == p.key() and p.val().estado==0%}
+                    <tr>
+                        <th scope="row"><img src="{{p.val().enlace}}"  height="65" width="65" class="rounded">{{v.key()}}</th>
+                        <td>{{p.val().Producto}}</td>
+                        <td>{{p.val().Precio}}</td>
+                        <td>{{p.val().Descripcion}}</td>
+                        <td>{{p.val().Categoria}}</td>
+                        <td>A la espera de ser Verificado</td>
+                      </tr>
+                      {%endif%}
+                      {%endfor%}
+                {% endfor %}
+                {%for v in vendidos%}
+                {%for p in productos%}
+                {%if v.val().producto == p.key() and p.val().estado==1 and p.val().Piezas>0%}
+                <tr>
+                    <th scope="row"><img src="{{p.val().enlace}}"  height="65" width="65" class="rounded">{{v.key()}}</th>
+                    <td>{{p.val().Producto}}</td>
+                    <td>{{p.val().Precio}}</td>
+                    <td>{{p.val().Descripcion}}</td>
+                    <td>{{p.val().Categoria}}</td>
+                    <td>Verificado</td>
+                  </tr>
+                  {%endif%}
+                  {%endfor%}
+            {% endfor %}
+         
+            
+            <!-- Espera de pago-->
+            {%for ve in ventas%}
+            {%for p in productos%}
+            {%for v in vendidos%}
+            {%if v.key()==ve.val().fkProducto and v.key()==p.key() and ve.val().estado==1%}
+            <tr>
+                <th scope="row"><img src="{{p.val().enlace}}"  height="65" width="65" class="rounded">{{v.key()}}</th>
+                <td>{{p.val().Producto}}</td>
+                <td>{{p.val().Precio}}</td>
+                <td>{{p.val().Descripcion}}</td>
+                <td>{{p.val().Categoria}}</td>
+                <td>Producto en espera de pago</td>
+              </tr>
+              {%endif%}
+              {% endfor %}
+        {% endfor %}
+        {% endfor %}
+             <!-- Enviado-->
+             {%for ve in ventas%}
+             {%for p in productos%}
+             {%for v in vendidos%}
+             {%if v.key()==ve.val().fkProducto and v.key()==p.key() and ve.val().estado==0%}
+             <tr>
+                 <th scope="row"><img src="{{p.val().enlace}}"  height="65" width="65" class="rounded">{{v.key()}}</th>
+                 <td>{{p.val().Producto}}</td>
+                 <td>{{p.val().Precio}}</td>
+                 <td>{{p.val().Descripcion}}</td>
+                 <td>{{p.val().Categoria}}</td>
+                 <td>Pagado y enviado</td>
+               </tr>
+               {%endif%}
+               {% endfor %}
+         {% endfor %}
+         {% endfor %}
+
+        {%for v in vendidos%}
+        {%for p in productos%}
+        {%if v.val().producto == p.key() and p.val().Piezas==-1%}
+        <tr>
+            <th scope="row"><img src="{{p.val().enlace}}"  height="65" width="65" class="rounded">{{v.key()}}</th>
+            <td>{{p.val().Producto}}</td>
+            <td>{{p.val().Precio}}</td>
+            <td>{{p.val().Descripcion}}</td>
+            <td>{{p.val().Categoria}}</td>
+            <td>Vendido</td>
+          </tr>
+          {%endif%}
+          {%endfor%}
+    {% endfor %}
+                </tbody>
+              </table>
+        </div>
+        <div class="tab-pane fade" id="listCategoria" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+           
+        </div>
+      </div>
+    </div>
+  </div>
+{%else%}
+<h1>No tienes productos, Empieza a agregar Productos</h1>
+{%endif%}
+{%endblock%}

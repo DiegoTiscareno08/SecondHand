@@ -1,0 +1,93 @@
+{% extends "layoutAdmin.html" %}
+{% block content %}
+<div class="mx-auto"style="width: 200px;">
+  
+  <h2>Categorias</h2>
+
+</div>
+
+<div class="row">
+    <div class="col-3">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <br>
+        <div class="mx-auto"style="width:200px;">
+        <h>Agregar Categoria</h>
+        <form name="tuformulario" method="POST" action="{{act}}">
+            <div class="form-group">
+              <input type="hidden" class="form-control" name="txtId"  value="{{ide}}">
+              <input type="text" class="form-control" name="txtCategoria" placeholder="{{v}}">
+              <input type="hidden" class="form-control" name="antiguaCategoria" value="{{v}}">
+            </div>
+            <button type="submit" class="btn btn-primary">{{i}}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="addCategoria" role="tabpanel" aria-labelledby="v-pills-home-tab">
+            Lista de Categorias
+            <table class="table" id="mytable">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {%for l in c %}
+                    <tr>
+                        <th scope="row">{{l.key()}}<input id="prodId" name="catId" type="hidden" value="{{l.key()}}"></th>
+                        <td>{{l.val().nombreCategoria}}</td>
+                        <td>
+                            <a class="btn btn-primary"href="/getCategoria/{{l.key()}}">Editar</a>
+                            <a class="btn btn-danger"href="/deleteCategoria/{{l.key()}}">Eliminar</a>
+                        </td>
+                      </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+        </div>
+        <div class="tab-pane fade" id="listCategoria" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+           
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Modal Editar-->
+  <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="/editCategoria">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="txtId" value="">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="txtEditar" placeholder="Introduce el nuevo nombre">
+                </div>
+                <button type="submit" class="btn btn-primary">Editar</button>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-primary" role="alert"style="display:{{estado}}">
+    {{msje}}
+  </div>
+  <h1>{{p}}</h1>
+  <script language="JavaScript">
+    function pregunta(){
+        if (confirm('¿Estas seguro de enviar este formulario?')){
+           document.tuformulario.submit()
+        }
+    }
+    </script>
+{% endblock %}

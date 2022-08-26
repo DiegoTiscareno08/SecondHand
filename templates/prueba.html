@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es-ES" prefix="og: http://ogp.me/ns#">
+<head>
+   <meta charset="UTF-8"/>
+</head>
+<body>
+   <form method="post" action="claseDestino.php" onsubmit="return confirmation()">
+        <input type="text"  id="categoria">
+      <button type="submit" >PRESIONAR</button> 
+   </form>			
+ 
+    <script type="text/javascript">
+    
+     function confirmation() 
+     {
+        var elem = document.getElementById("categoria").value;
+        if(confirm("Desea seguir?"+elem))
+	{
+	   return true;
+	}
+	else
+	{
+	   return false;
+	}
+     }
+    </script>
+</body>
+</html>

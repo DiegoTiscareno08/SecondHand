@@ -1,0 +1,46 @@
+{% extends "layoutCliente.html"%}
+{% block content%}
+<form action="/finalizarCompra" method="POST">
+    <div class="form-group">
+        <img src="{{link}}" class="rounded" height="200" width="200">
+            </div>
+            <div class="form-group">
+              <h5 style="color: rgb(0, 98, 128);">Vendedor</h5>
+              <h2>{{vende}}</h2>
+              <input type="hidden" class="form-control" value="{{vende}}" name="txtVendedor">
+                  </div>
+    <div class="form-group">
+      <input type="hidden" class="form-control" value="{{idP}}" name="idProducto">
+          </div>
+    <div class="form-group">
+        <h5 style="color: rgb(0, 98, 128);">Producto</h5>
+        <h2>{{name}}</h2>
+      <input type="hidden" class="form-control" value="{{name}}"name="txtProducto">
+    </div>
+    <div class="form-group form-check">
+       <h5 style="color: rgb(0, 98, 128);">Precio</h5>
+        <h2>{{"${:,.2f}".format(precio)}}</h2>
+      <input type="hidden" class="form-control" name="Precio" value="{{precio}}">
+    </div>
+    <div class="form-group form-check">
+        <h5 style="color: rgb(0, 98, 128);">Descripción</h5>
+        <h3>{{desc}}</h3>
+      <input type="hidden" class="form-control" name="Descripcion" value="{{desc}}">
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Nombre:</span>
+        </div>
+        <input type="text" class="form-control" name="nombre"placeholder="Escribe tu nombre completo" aria-label="Username" aria-describedby="basic-addon1" required>
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Dirección:</span>
+        </div>
+        <input type="text" class="form-control" name="direccion" placeholder="Escribe tu direccion" aria-label="Username" aria-describedby="basic-addon1" required>
+      </div>
+    <button type="submit" class="btn btn-success btn-lg btn-block">Comprar</button>
+    
+  </form>
+  <a href="{{ url_for('cancelarCompra') }}"class="btn btn-danger btn-lg btn-block">Cancelar</a>
+{%endblock%}

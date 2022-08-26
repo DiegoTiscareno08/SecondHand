@@ -1,0 +1,11 @@
+{% extends "layoutDueno.html" %}
+{% block content %}
+
+<h1>Dueño</h1>
+<h6>Este es el crud del Cliente</h6>
+    <h1>{{session['uid']}}</h1>
+{% for message in get_flashed_messages() %}
+    <h1>{{message}}</h1>
+{% endfor %}
+
+{% endblock %}

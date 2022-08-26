@@ -1,0 +1,133 @@
+{% extends "layoutAdmin.html" %}
+{% block content %}
+<h1>Productos</h1>
+{{session['uid']}}
+<div class="row">
+    <div class="col-3">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        
+        <form method="POST" action="{{act}}" enctype="multipart/form-data">
+          <div class="form-group">
+            <input type="text" class="form-control"value="Second Hand" style="background-color: tomato;color: whitesmoke;"disabled>
+            <input type="hidden" class="form-control"value="Second Hand" style="background-color: tomato;color: whitesmoke;"name="txtVende"
+            >
+            <input type="hidden" value="{{vId}}" name="txtId">
+            <input type="text" class="form-control" name="txtProducto"value="{{vProd}}"  placeholder="Nombre del producto..."required><br>
+            <input type="number" step="0" class="form-control" name="txtPieza"value="{{vPie}}"placeholder="Número de piezas..." required><br>
+            <input type="number" step="0.01" class="form-control" name="txtPrecio"value="{{vPre}}"placeholder="Precio del producto..." required><br>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Categorías</label>
+              </div>
+              <input type="hidden" name="txtCateA" value="{{msje}}" >
+              <select class="custom-select" name="txtCategoria"{{r}}>
+                <option selected value="{{vCate}}">{{msje}}</option>
+              {% for c in cate %}
+                {% if c.val().nombreCategoria == msje %}
+                  {%continue%}
+                {% endif %}
+                <option value="{{c.key()}}">{{c.val().nombreCategoria}}</option>
+              {% endfor %}
+              </select>
+            </div>
+            <textarea required name="txtDescripcion"class="form-control" aria-label="With textarea">{{vDes}}</textarea>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+              </div>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" name="upload"id="upload" aria-describedby="inputGroupFileAddon01">
+                <label class="custom-file-label" for="upload">Choose file</label>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Agregar</button>
+        </form>
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="addProduct" role="tabpanel" aria-labelledby="v-pills-home-tab">
+            Lista
+            <div class="alert alert-success" role="alert">
+              <h3>Total por Vender= {{"${:,.2f}".format(session['total'])}}</h3>
+            </div>
+            <h1>{{session['uid']}}</h1>
+            <form action="/filtrarPor" method="POST">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Filtrar por:</label>
+                </div>
+                <select class="custom-select" name="idCate"{{cb}}>
+                  <option selected value="" >Todos</option>
+                  {% for ca in cate%}
+                  <option value="{{ca.key()}}">{{ca.val().nombreCategoria}}</option>
+                  {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-info">Filtrar</button>
+              </div>
+            </form>
+            <table class="table" id="mytable">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Producto</th>
+                  <th scope="col">Precio</th>
+                  <th scope="col">Descripción</th>
+                  <th scope="col">Categoría</th>
+                  <th scope="col">Piezas</th>
+                  <th scope="col">Total $$</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+          {% if product %}
+            {%if op%}
+              {%for p in product %}
+                  {%if op==p.val().Categoria and p.val().Vendedor=="Second Hand" and p.val().Piezas>0%}
+                    <tr>
+                      <th scope="row">{{p.key()}}<input id="prodId" name="prodId" type="hidden" value="{{p.key()}}"></th>
+                      <td>{{p.val().Producto}}</td>
+                      <td>$$ {{p.val().Precio}}</td>
+                      <td>{{p.val().Descripcion}}</td>
+                      <td>{{p.val().Categoria}}</td>
+                      <td>$$ {{p.val().Piezas}}</td>
+                      <td><img src="{{p.val().enlace}}"height="50" width="50"  alt=""></td>
+                      <td>
+                          <button type="submit" class="btn btn-primary"><a style="color:white;"href="/getProducto/{{p.key()}}">Editar</a></button>
+                          <button type="submit" class="btn btn-danger"><a style="color: white;"href="/deleteProducto/{{p.key()}}">Eliminar</a></button>
+                      </td>
+                    </tr>
+                  {% endif %}
+                  {% endfor %}
+                {% else %}
+                {%for p in product %}
+                {%if p.val().Vendedor=="Second Hand" and p.val().Piezas>0%}
+                  <tr>
+                    <th scope="row">{{p.key()}}<input id="prodId" name="prodId" type="hidden" value="{{p.key()}}"></th>
+                    <td>{{p.val().Producto}}</td>
+                    <td>$${{p.val().Precio}}</td>
+                    <td>{{p.val().Descripcion}}</td>
+                    <td>{{p.val().Categoria}}</td>
+                    <td>{{p.val().Piezas}}</td>
+                    <td>$$ {{p.val().Piezas*p.val().Precio}}</td>
+                    <td><img src="{{p.val().enlace}}"height="50" width="50" alt=""></td>
+                    <td>
+                        <button type="submit" class="btn btn-primary"><a style="color:white;"href="/getProducto/{{p.key()}}">Editar</a></button>
+                        <button type="submit" class="btn btn-danger"><a style="color: white;"href="/deleteProducto/{{p.key()}}">Eliminar</a></button>
+                    </td>
+                  </tr>
+                  {%endif%}
+                {% endfor %}
+                {%endif%}
+              </tbody>
+            </table>
+          {% else %}
+            <h1>No hay datos por mostrar</h1>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+  </div>
+{% endblock %}

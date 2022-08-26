@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<li class="nav-item active">
+    <a class="nav-link" href="#"data-toggle="modal" data-target="#modalRegistro">Inicio <span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="#"data-toggle="modal" data-target="#modalRegistro">Catalogo<span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="#"data-toggle="modal" data-target="#modalRegistro">Second Hand <span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="#"data-toggle="modal" data-target="#modalRegistro">Carrito <span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="#"data-toggle="modal" data-target="#modalRegistro">Cerrar Sesión <span class="sr-only">(current)</span></a>
+</li>
+</ul>
+</div>
+</nav>
+<h1>Cliente</h1>
+{{user}}
+{% endblock %}

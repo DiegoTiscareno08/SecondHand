@@ -1,0 +1,52 @@
+{% extends "layoutAdmin.html" %}
+{% block content %}
+
+<h1>Vendedores</h1>
+         <table class="table" id=mytable>
+            <thead>
+              <tr>
+                <th></th>
+                <th scope="col">Vendedor</th>
+                <th scope="col">Producto</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Estatus</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%if productos%}
+              {% for p in productos %}
+                {% if p.val().Vendedor !="Second Hand" and p.val().estado==0 %}
+              <tr>
+                <th scope="row"><img src="{{p.val().enlace}}" height="50" width="50"></th>
+                <td>{{p.val().Vendedor}}</td>
+                <td>{{p.val().Producto}}</td>
+                <td>{{p.val().Descripcion}}</td>
+                <td>Sin validar</td>
+                <td><button type="submit" class="btn btn-primary"><a style="color:white;"href="/validarProducto/{{p.key()}}">Habilitar</a></button>
+                    <button type="submit"class="btn btn-danger" ><a style="color:white;"href="/deleteProducto/{{p.key()}}">Eliminar</a></button></td>
+              </tr>
+                {% endif %}
+              {% endfor %}
+              {%if productos%}
+              {% for p in productos %}
+                {% if p.val().Vendedor !="Second Hand" and p.val().estado==1 %}
+              <tr>
+                <th scope="row"><img src="{{p.val().enlace}}" height="50" width="50"></th>
+                <td>{{p.val().Vendedor}}</td>
+                <td>{{p.val().Producto}}</td>
+                <td>{{p.val().Descripcion}}</td>
+                <td>Verificado</td>
+                <td><button type="submit" class="btn btn-primary"><a style="color:white;"href="/deshabilitarProducto/{{p.key()}}">Deshabilitar</a></button>
+                    <button type="submit"class="btn btn-danger" ><a style="color:white;"href="/deleteProducto/{{p.key()}}">Eliminar</a></button></td>
+              </tr>
+                {% endif %}
+              {% endfor %}
+              {%endif%}
+            </tbody>
+          </table>
+          
+          {%else%}
+          <h1>No hay datos por mostrar</h1>
+          {%endif%}
+{% endblock %}

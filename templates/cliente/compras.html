@@ -1,0 +1,79 @@
+{% extends "layoutCliente.html"%}
+{% block content%}
+<h1>Compras</h1>
+
+      {%if compras and ventas%}
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#Id de Compra</th>
+            <th scope="col"></th>
+            <th scope="col">Compra</th>
+            <th scope="col">Vende</th>
+            <th scope="col">Producto</th>
+            <th scope="col">Pagaste</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%for v in ventas%}
+          {% for p in productos%}
+          {%for u in users%}
+          {%if v.val().fkProducto==p.key() and v.val().fkUser==u.key() and u.key()==session['uid'] and v.val().estado==1%}
+          <tr>
+            <th scope="row">{{v.key()}}</th>
+            <td><img src="{{p.val().enlace}}" alt=""height="85" width="85"></td>
+            <td>{{u.val().correo}}</td>
+            <td>{{p.val().Vendedor}}</td>
+            <td>{{p.val().Producto}}</td>
+            <td>{{p.val().Precio}}</td>
+            <td><a href="/banco/{{v.key()}}" type="button"class="btn btn-warning">Pagar aquí</a></td>
+          </tr>
+          {%endif%}
+          {%endfor%}
+          {%endfor%}
+          {%endfor%}
+
+          {%for v in ventas%}
+          {% for p in productos%}
+          {%for u in users%}
+          {%if v.val().fkProducto==p.key() and v.val().fkUser==u.key() and u.key()==session['uid'] and v.val().estado==0%}
+          <tr>
+            <th scope="row">{{v.key()}}</th>
+            <td><img src="{{p.val().enlace}}" alt=""height="85" width="85"></td>
+            <td>{{u.val().correo}}</td>
+            <td>{{p.val().Vendedor}}</td>
+            <td>{{p.val().Producto}}</td>
+            <td>{{p.val().Precio}}</td>
+            <td>Producto en Camino</td>
+            <td><a href="/productoRecibido/{{v.key()}}" type="button"class="btn btn-warning">Marcar Como recibido</a></td>
+
+          </tr>
+          {%endif%}
+          {%endfor%}
+          {%endfor%}
+          {%endfor%}
+          
+          {%for v in ventas%}
+          {% for p in productos%}
+          {%for u in users%}
+          {%if v.val().fkProducto==p.key() and v.val().fkUser==u.key() and u.key()==session['uid'] and v.val().estado==-1%}
+          <tr>
+            <th scope="row">{{v.key()}}</th>
+            <td><img src="{{p.val().enlace}}" alt=""height="85" width="85"></td>
+            <td>{{u.val().correo}}</td>
+            <td>{{p.val().Vendedor}}</td>
+            <td>{{p.val().Producto}}</td>
+            <td>{{p.val().Precio}}</td>
+            <td>Producto Recibido</td>
+          </tr>
+          {%endif%}
+          {%endfor%}
+          {%endfor%}
+          {%endfor%}
+    </tbody>
+</table>
+{%else%}
+<h1>No hay datos que mostrar</h1>
+{%endif%}
+{%endblock%}

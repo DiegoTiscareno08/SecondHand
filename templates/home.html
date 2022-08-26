@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+{% block content %}
+<style type="text/css">
+  .ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+   }
+  .short { width: 50px; }
+</style>
+<li class="nav-item active">
+  <a class="nav-link" href="#"data-toggle="modal" data-target="#modalLogin">Login <span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="#"data-toggle="modal" data-target="#modalRegistro">Registrate <span class="sr-only">(current)</span></a>
+  </li>
+</ul>
+</div>
+</nav>
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>{{message}}</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+<div class="input-group mb-3">
+  <input type="text" class="filter form-control" placeholder="Buscar..." aria-label="Recipient's username" aria-describedby="button-addon2">
+</div>
+
+<div class="row" >
+  {%if prod%}
+  {%for p in prod%}
+  {%if p.val().estado == 1 and p.val().Piezas>0 %}
+  <div class="card" style="width: 18rem;background-color:whitesmoke;" data-string="{{p.val().Producto}}">
+    <img src="{{p.val().enlace}}" class="card-img-top" height="150" width="135">
+    <div class="card-body">
+      <h5 class="card-title">{{p.val().Producto}}</h5>
+      <p class="card-text short" >
+          <p class="ellipsis">{{p.val().Descripcion}}</p>
+ 
+        </p>
+      <p class="card-text">{{p.val().Precio}}</p>
+      <center><a href="/addCarrito/{{p.key()}}" class="btn btn-warning btn-lg btn-block"><h3>➕Carrito</h3></a>
+        <a href="/comprarProducto/{{p.key()}}" class="btn btn-success btn-lg btn-block"><h3>Comprar</h3></a></center>
+    </div>
+
+  </div>
+  {%endif%}
+  {% endfor %}
+  {%else%}
+  <h1>No hay productos Disponibles</h1>
+  {%endif%}
+
+</div>
+<!-- Modal Login-->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="/Login">
+                <div class="form-group">
+                  <input type="email" class="form-control" name="txtLoginEmail" aria-describedby="emailHelp" placeholder="Introduce tu correo">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="txtLoginPassword" placeholder="Introduce tu contraseña">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Registro-->
+<div class="modal fade" id="modalRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Registro</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="/Registro">
+                <div class="form-group">
+                  <input type="email" class="form-control" name="txtRegistroEmail" aria-describedby="emailHelp" placeholder="Introduce tu correo">
+                  <input type="hidden" name="txtPermiso" value="1" readonly="readonly">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="txtRegistroPassword" placeholder="Introduce tu contraseña">
+                </div>
+                <button type="submit" class="btn btn-primary">Registrate</button>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+       $(".filter").on("keyup", function() {
+    var input = $(this).val().toUpperCase();
+  
+    $(".card").each(function() {
+      if ($(this).data("string").toUpperCase().indexOf(input) < 0) {
+        $(this).hide();
+      } else {
+        $(this).show();
+      }
+    })
+  });
+  
+  </script>
+{% endblock %}

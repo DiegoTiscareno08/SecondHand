@@ -1,0 +1,100 @@
+{% extends "layoutDueno.html" %}
+{% block content %}
+<h6>Ventas de Second Hand</h6>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <center><h4>Vendido Total = {{ "${:,.2f}".format(session['total']) }}
+  </h4></center> </div> 
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>{{message}}</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+{% if ventas and productos%}
+<table class="table" id="mytable">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">ID Compra</th>
+      <th scope="col">Producto</th>
+      <th scope="col">Precio</th>
+      <th scope="col">Compra</th>
+      <th scope="col">Vende</th>
+      <th scope="col">Estatus</th>
+    </tr>
+  </thead>
+  <tbody>
+{%for v in ventas%}
+{%for p in productos%}
+{%for u in us%}
+<!--En espera de pago-->
+{%if p.key()==v.val().fkProducto and p.val().Vendedor=="Second Hand" and u.key()==v.val().fkUser and v.val().estado==1%}
+<tr>
+    <th scope="row"><img src="{{p.val().enlace}}" height="100" width="100"></th>
+    <td>{{v.key()}}</td>
+    <td>{{p.val().Producto}}</td>
+    <td>{{p.val().Precio}}</td>
+    <td>{{u.val().correo}}</td>
+    <td>{{p.val().Vendedor}}</td>
+    <td style="color: darkgoldenrod;">Esperando el pago</td>
+  </tr>
+  {%endif%}
+  <!--Enviado-->
+{%if p.key()==v.val().fkProducto and p.val().Vendedor=="Second Hand" and u.key()==v.val().fkUser and v.val().estado==0%}
+<tr>
+    <th scope="row"><img src="{{p.val().enlace}}" height="100" width="100"></th>
+    <td>{{v.key()}}</td>
+    <td>{{p.val().Producto}}</td>
+    <td>{{p.val().Precio}}</td>
+    <td>{{u.val().correo}}</td>
+    <td>{{p.val().Vendedor}}</td>
+    <td style="color: darkgoldenrod;">Pagado y Enviado</td>
+  </tr>
+  {%endif%}
+  <!--Recibido-->
+{%if p.key()==v.val().fkProducto and p.val().Vendedor=="Second Hand" and u.key()==v.val().fkUser and v.val().estado==-1%}
+<tr>
+    <th scope="row"><img src="{{p.val().enlace}}" height="100" width="100"></th>
+    <td>{{v.key()}}</td>
+    <td>{{p.val().Producto}}</td>
+    <td>{{p.val().Precio}}</td>
+    <td>{{u.val().correo}}</td>
+    <td>{{p.val().Vendedor}}</td>
+    <td style="color: darkgoldenrod;">Entregado</td>
+  </tr>
+  {%endif%}
+
+  {%if p.key()==v.val().fkProducto and p.val().Vendedor!="Second Hand"%}
+    
+  {%break%}
+  <h1>No hay ventas aun</h1>
+    
+{%endif%}
+{%endfor%}
+{%endfor%}
+{%endfor%}
+</tbody>
+</table>
+
+{%else%}
+<h5>No hay productos por mostrar</h5>
+{%endif%}
+<script type="text/javascript">
+    
+    function confirmation() 
+    {
+       var elem = document.getElementById("categoria").value;
+       if(confirm("Esta seguro de agregar esta categoria "+elem))
+   {
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+    }
+   </script>
+
+{% endblock %}

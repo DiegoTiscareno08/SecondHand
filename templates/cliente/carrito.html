@@ -1,0 +1,84 @@
+{% extends "layoutCliente.html"%}
+{% block content%}
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Carrito de Compras</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% if carr %}
+      {%for c in carr%}
+      {%for p in prod%}
+      {% if c.val().producto == p.key() and c.val().estado ==1 and p.val().Piezas==1%}
+      <tr>
+        <td><img src="{{p.val().enlace}}" height="85" width="85" class="rounded"></td>
+        <td>{{p.val().Producto}}</td>
+        <td>{{p.val().Precio}}</td>
+        <td><a href="/darBaja/{{p.key()}}" class="btn btn-warning"type="button">Deseleccionar</a></td>
+        <td><a href="/comprarProducto/{{p.key()}}" class="btn btn-success">Comprar</a>
+          <a href="/eliminarCarrito/{{p.key()}}" class="btn btn-danger">Eliminar</a></td>
+      </tr>
+
+
+      {% endif %}
+      {%endfor%}
+
+      {% endfor %}
+  
+      <tr>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          Total = {{ "${:,.2f}".format(v) }}
+        </div> 
+  
+      </tr>
+ 
+    
+   
+    {%for c in carr%}
+    {%for p in prod%}
+    {% if c.val().producto == p.key() and c.val().estado ==0 and p.val().Piezas==1%}
+    <tr>
+      <td><img src="{{p.val().enlace}}" height="85" width="85" class="rounded"></td>
+      <td>{{p.val().Producto}}</td>
+      <td>{{p.val().Precio}}</td>
+      <td><a href="/darAlta/{{p.key()}}" type="button"class="btn btn-info">Seleccionar</a></td>
+      <td><a href="/comprarProducto/{{p.key()}}" class="btn btn-success">Comprar</a>
+        <a href="/eliminarCarrito/{{p.key()}}" class="btn btn-danger">Eliminar</a></td>
+    </tr>
+    {% endif %}
+    
+
+    {%endfor%}
+
+    {% endfor %}
+
+    {%for c in carr%}
+    {%for p in prod%}
+    {% if c.val().producto == p.key() and p.val().Piezas==0%}
+    <tr>
+      <td><img src="{{p.val().enlace}}" height="85" width="85" class="rounded"></td>
+      <td>{{p.val().Producto}}</td>
+      <td>{{p.val().Precio}}</td>
+      <td><a type="button" class="btn btn-secondary">Producto Comprado</a>
+        </td>
+        <td><a href="/eliminarCarrito/{{p.key()}}" type="button"class="btn btn-danger">Eliminar</a></td>
+    </tr>
+    {% endif %}
+    
+
+    {%endfor%}
+
+    {% endfor %}
+
+    {% else %}
+    <h1>No hay datos por mostrar</h1>
+    {% endif%}
+
+
+
+
+  </tbody>
+</table>
+{%endblock%}

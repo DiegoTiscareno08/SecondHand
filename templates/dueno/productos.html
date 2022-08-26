@@ -1,0 +1,52 @@
+{% extends "layoutDueno.html" %}
+{% block content %}
+<h6>Gestiona Los administradores</h6>
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>{{message}}</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+
+{% if productos %}
+<div class="alert alert-success" role="alert">
+  <center><h1>Total por Vender: </h1><h3>{{ "${:,.2f}".format(session['total']) }}</h3></center>
+</div>
+<table class="table" id="mytable">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Producto</th>
+      <th scope="col">Precio</th>
+      <th scope="col">Descripción</th>
+      <th scope="col">Categoría</th>
+      <th scope="col">Piezas</th>
+      <th scope="col">Total $$</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+{%for p in productos%}
+{%if p.val().Vendedor=="Second Hand" and p.val().Piezas>0%}
+<tr>
+  <th scope="row">{{p.key()}}<input id="prodId" name="prodId" type="hidden" value="{{p.key()}}"></th>
+  <td>{{p.val().Producto}}</td>
+  <td>$${{p.val().Precio}}</td>
+  <td>{{p.val().Descripcion}}</td>
+  <td>{{p.val().Categoria}}</td>
+  <td>{{p.val().Piezas}}</td>
+  <td>$$ {{p.val().Piezas*p.val().Precio}}</td>
+  <td><img src="{{p.val().enlace}}"height="50" width="50" alt=""></td>
+</tr>
+{%endif%}
+{%endfor%}
+</tbody>
+</table>
+
+{%else%}
+<h5>No hay productos por mostrar</h5>
+{%endif%}
+
+{% endblock %}
